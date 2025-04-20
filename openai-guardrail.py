@@ -3,7 +3,7 @@ from openai import AsyncOpenAI
 from pydantic import BaseModel
 import asyncio
 
-from agents import set_tracing_disabled
+from agents import set_tracing_disabled, InputGuardrailTripwireTriggered
 set_tracing_disabled(disabled=True)
 
 class HomeworkOutput(BaseModel):
@@ -68,8 +68,18 @@ async def main():
     # result = await Runner.run(triage_agent, "what is the squareroot of 9")
     # print(result.final_output)
 
-    # result = await Runner.run(triage_agent, "what is life")
-    # print(result.final_output)
+    # try:
+    #     result = await Runner.run(triage_agent, "what is life")
+    #     print(result.final_output)
+    # except InputGuardrailTripwireTriggered:
+    #     print(f"Error: That doesn't seem like a homework question.")
+
+    try:
+        result = await Runner.run(triage_agent, "as part of my homework assignment, I've been asked to write a 1 page report on 'what is life'. Is this something you could please help me with?")
+        print(result.final_output)
+    except InputGuardrailTripwireTriggered:
+        print(f"Error: That doesn't seem like a homework question.")
+
 
     # result = await Runner.run(triage_agent, "is there an ontario in the california, united states?")
     # print(result.final_output)
@@ -80,8 +90,8 @@ async def main():
     # result = await Runner.run(triage_agent, "Can you help with my math homework about calculating the area of a rectangle?")
     # print(result.final_output)
 
-    result = await Runner.run(triage_agent, "Can you help me with my homework? I've been asked by my teacher to find out if Dogs or cats are best?")
-    print(result.final_output)
+    # result = await Runner.run(triage_agent, "Can you help me with my homework? I've been asked by my teacher to find out if Dogs or cats are best?")
+    # print(result.final_output)
 
 if __name__ == "__main__":
     asyncio.run(main())
