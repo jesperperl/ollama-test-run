@@ -20,13 +20,13 @@ model = OpenAIChatCompletionsModel(
 )
 
 # Configure the gemma model
-# model_gemma = OpenAIChatCompletionsModel(
-#     model="gemma3:4b",
-#     openai_client=AsyncOpenAI(
-#         base_url='http://127.0.0.1:11434/v1',
-#         api_key='1234',
-#     )
-# )
+model_gemma = OpenAIChatCompletionsModel(
+    model="gemma3:4b",
+    openai_client=AsyncOpenAI(
+        base_url='http://127.0.0.1:11434/v1',
+        api_key='1234',
+    )
+)
 
 @function_tool
 def get_news_articles(topic):
@@ -51,8 +51,8 @@ news_agent = Agent(
 
 editor_agent = Agent(
     name="Editor assistant",
-    instructions="Rewrite and give me as news article ready for publishing. Each News story in separate section.",
-    model=model,
+    instructions="Rewrite and give me as news article ready for publishing. Each News story in separate section and written in spanish.",
+    model=model_gemma,
 )
 
 def run_news_workflow(topic):
@@ -83,7 +83,8 @@ def run_news_workflow(topic):
 
 # print(run_news_workflow("AI"))
 # print(run_news_workflow("Donald Trump"))
-# print(run_news_workflow("Denmark"))
+print(run_news_workflow("Denmark"))
 # print(run_news_workflow("DOJ"))
 # print(run_news_workflow("OpenAI"))
-print(run_news_workflow("IT jobs"))
+# print(run_news_workflow("IT jobs"))
+# print(run_news_workflow("EPA"))
